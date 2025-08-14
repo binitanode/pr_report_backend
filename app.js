@@ -16,6 +16,7 @@ const app = express();
 
 // Basic middleware
 app.use(cors({
+  origin:["pr-report-new.vercel.app"],
   allowedHeaders: ['Content-Type', 'Authorization','Authorization-Token'],
 }));
 app.use(express.json({ limit: '10mb' }));
