@@ -1,5 +1,13 @@
 // api/index.js
-const serverless = require('serverless-http'); // npm i serverless-http
+const serverless = require('serverless-http');
 const app = require('../src/app');
+const dbConnect = require('../src/configs/db'); // <-- we'll create this
 
-module.exports = (req, res) => serverless(app)(req, res);
+let handler; // cache serverless handler between invocations
+
+module.exports = async (req, res) => {
+  // Ensure DB is connected before handling the request
+  await dbConnect();
+  if (!handler) handler = serverless(app);
+  return handler(req, res);
+};
