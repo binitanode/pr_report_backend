@@ -24,6 +24,7 @@
     "nodemon": "^3.1.10",
     "Parser": "^0.0.1",
     "path": "^0.12.7",
+    "serverless-http": "^3.2.0",
     "uuid": "^11.1.0",
     "validators": "^0.3.1"
   }
