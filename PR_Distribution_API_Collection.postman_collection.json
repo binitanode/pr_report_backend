@@ -1,0 +1,835 @@
+{
+	"info": {
+		"_postman_id": "pr-distribution-api-collection",
+		"name": "PR Distribution API Collection",
+		"description": "Complete API collection for PR Distribution project including Authentication, User Management, Role Management, and PR Distribution operations.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345678"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "User Registration",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"role\": \"user\",\n  \"user_type\": \"regular\",\n  \"user_name\": \"johndoe\",\n  \"user_id\": \"USR001\",\n  \"profile_image\": \"https://example.com/profile.jpg\",\n  \"avatar\": \"https://example.com/avatar.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user account. This endpoint does not require authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "User Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authenticate user and receive JWT token. This endpoint requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/forgotpassword",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"forgotpassword"
+							]
+						},
+						"description": "Request password reset for a user account."
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token\": \"reset_token_here\",\n  \"password\": \"NewSecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/resetpassword",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"resetpassword"
+							]
+						},
+						"description": "Reset user password using the reset token."
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration, login, and password management."
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Jane Smith\",\n  \"email\": \"jane.smith@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"role\": \"admin\",\n  \"user_type\": \"manager\",\n  \"user_name\": \"janesmith\",\n  \"user_id\": \"USR002\",\n  \"profile_image\": \"https://example.com/jane-profile.jpg\",\n  \"avatar\": \"https://example.com/jane-avatar.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/createuser",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"createuser"
+							]
+						},
+						"description": "Create a new user account. Requires authentication and appropriate permissions."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/getuser/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"getuser",
+								"{{user_id}}"
+							]
+						},
+						"description": "Retrieve user information by user ID. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/getallusers?page=1&limit=10&search=john",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"getallusers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of users per page (max 100)"
+								},
+								{
+									"key": "search",
+									"value": "john",
+									"description": "Search term for filtering users"
+								}
+							]
+						},
+						"description": "Retrieve all users with optional pagination and search. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"John Doe Updated\",\n  \"email\": \"john.updated@example.com\",\n  \"role\": \"admin\",\n  \"user_type\": \"manager\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/updateuser/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"updateuser",
+								"{{user_id}}"
+							]
+						},
+						"description": "Update user information by user ID. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/deleteuser/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"deleteuser",
+								"{{user_id}}"
+							]
+						},
+						"description": "Delete a user account by user ID. Requires authentication and appropriate permissions."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/users/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"users",
+								"me"
+							]
+						},
+						"description": "Get current authenticated user's information. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by Firebase ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/getuserdatabyfirebaseid/{{firebase_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"getuserdatabyfirebaseid",
+								"{{firebase_id}}"
+							]
+						},
+						"description": "Retrieve user information by Firebase ID. Requires authentication."
+					},
+					"response": []
+				}
+			],
+			"description": "User management endpoints for CRUD operations on user accounts."
+		},
+		{
+			"name": "Role Management",
+			"item": [
+				{
+					"name": "Get All Roles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/roles/getRoles?page=1&limit=10&search=admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"getRoles"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of roles per page"
+								},
+								{
+									"key": "search",
+									"value": "admin",
+									"description": "Search term for filtering roles"
+								}
+							]
+						},
+						"description": "Retrieve all roles with optional pagination and search. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Role",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"_id\": \"ROLE001\",\n  \"name\": \"Content Manager\",\n  \"permission\": {\n    \"read\": true,\n    \"write\": true,\n    \"delete\": false,\n    \"admin\": false\n  },\n  \"user_id\": \"USR001\",\n  \"user_name\": \"johndoe\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/roles/createRole",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"createRole"
+							]
+						},
+						"description": "Create a new role with specific permissions. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Role by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/roles/getRole/{{role_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"getRole",
+								"{{role_id}}"
+							]
+						},
+						"description": "Retrieve role information by role ID. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Role",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Senior Content Manager\",\n  \"permission\": {\n    \"read\": true,\n    \"write\": true,\n    \"delete\": true,\n    \"admin\": false\n  },\n  \"user_id\": \"USR001\",\n  \"user_name\": \"johndoe\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/roles/updateRole/{{role_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"updateRole",
+								"{{role_id}}"
+							]
+						},
+						"description": "Update role information by role ID. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Role",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/roles/deleteRole/{{role_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"deleteRole",
+								"{{role_id}}"
+							]
+						},
+						"description": "Delete a role by role ID. Requires authentication and appropriate permissions."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Permission Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/roles/permission/count",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"permission",
+								"count"
+							]
+						},
+						"description": "Get count of permissions. Requires authentication."
+					},
+					"response": []
+				}
+			],
+			"description": "Role management endpoints for CRUD operations on user roles and permissions."
+		},
+		{
+			"name": "PR Distribution",
+			"item": [
+				{
+					"name": "Upload PR Report",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "csv_file",
+									"type": "file",
+									"src": [],
+									"description": "CSV file containing PR report data (max 50MB)"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/pr-distributions/uploadPR",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pr-distributions",
+								"uploadPR"
+							]
+						},
+						"description": "Upload a CSV file containing PR report data. Requires authentication. File must be CSV format and under 50MB."
+					},
+					"response": []
+				},
+				{
+					"name": "Get PR Report by Batch ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/pr-distributions/getPRReportByBatchId/{{batch_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pr-distributions",
+								"getPRReportByBatchId",
+								"{{batch_id}}"
+							]
+						},
+						"description": "Retrieve PR report data by batch ID from prModel. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Get PR Report Group by Grid ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/pr-distributions/getPRReportGroupByGridId/{{grid_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pr-distributions",
+								"getPRReportGroupByGridId",
+								"{{grid_id}}"
+							]
+						},
+						"description": "Retrieve PR report group data by grid ID from prGroupModel. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PR Report",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/pr-distributions/deletePRReport/{{grid_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pr-distributions",
+								"deletePRReport",
+								"{{grid_id}}"
+							]
+						},
+						"description": "Delete PR report by grid ID from prGroupModel. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Share PR Report",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/pr-distributions/sharePRReport/{{grid_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pr-distributions",
+								"sharePRReport",
+								"{{grid_id}}"
+							]
+						},
+						"description": "Share PR report by grid ID from prGroupModel. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Verify PR Report URL Access",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/pr-distributions/verifyPRReportUrl?grid_id={{grid_id}}&email={{email}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pr-distributions",
+								"verifyPRReportUrl"
+							],
+							"query": [
+								{
+									"key": "grid_id",
+									"value": "{{grid_id}}",
+									"description": "Grid ID of the PR report"
+								},
+								{
+									"key": "email",
+									"value": "{{email}}",
+									"description": "Email address (required for private reports, optional for public reports)"
+								}
+							]
+						},
+						"description": "Verify access to PR report URL. For public reports, email is optional. For private reports, email is required and must be in the shared emails list. This endpoint does not require authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Get PR Report Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"page\": 1,\n  \"limit\": 10,\n  \"search\": \"\",\n  \"batch_id\": \"BATCH001\",\n  \"recipient\": \"john@example.com\",\n  \"exchange_symbol\": \"AAPL\",\n  \"uploaded_by\": \"{{user_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/pr-distributions/getPRReportData",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pr-distributions",
+								"getPRReportData"
+							]
+						},
+						"description": "Get PR report data with filtering and pagination. This endpoint does not require authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Export PR Report as CSV",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/pr-distributions/exportPRReportCsv/{{grid_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"pr-distributions",
+								"exportPRReportCsv",
+								"{{grid_id}}"
+							]
+						},
+						"description": "Export PR report data as CSV file by grid ID. This endpoint does not require authentication."
+					},
+					"response": []
+				}
+			],
+			"description": "PR Distribution endpoints for managing PR reports, including upload, retrieval, sharing, and export operations."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:7777",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "your_jwt_token_here",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "user_mongodb_id_here",
+			"type": "string"
+		},
+		{
+			"key": "role_id",
+			"value": "role_mongodb_id_here",
+			"type": "string"
+		},
+		{
+			"key": "grid_id",
+			"value": "grid_id_here",
+			"type": "string"
+		},
+		{
+			"key": "batch_id",
+			"value": "batch_id_here",
+			"type": "string"
+		},
+		{
+			"key": "firebase_id",
+			"value": "firebase_user_id_here",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "pr_report_access_token_here",
+			"type": "string"
+		}
+	]
+}
