@@ -1,13 +1,29 @@
 // api/index.js
 const serverless = require('serverless-http');
-const app = require('../src/app');
-const dbConnect = require('../src/configs/db'); // <-- we'll create this
+const app = require('../app');
 
-let handler; // cache serverless handler between invocations
+let handler;
+let dbConnected = false;
 
 module.exports = async (req, res) => {
-  // Ensure DB is connected before handling the request
-  await dbConnect();
-  if (!handler) handler = serverless(app);
-  return handler(req, res);
+  try {
+    // Initialize handler only once
+    if (!handler) {
+      handler = serverless(app);
+    }
+    
+    // Handle the request
+    return await handler(req, res);
+  } catch (error) {
+    console.error('Vercel function error:', error);
+    
+    // Return a proper error response
+    if (!res.headersSent) {
+      return res.status(500).json({
+        error: 'Internal server error',
+        message: error.message,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
 };

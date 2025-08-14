@@ -1,31 +1,45 @@
 // src/config/db.js
 const mongoose = require("mongoose");
 
+let isConnected = false;
+
 async function connectDB() {
   try {
-    const isLive = process.env.MONGODB_SERVER === "live";
-    const uri = isLive
-      ? process.env.MONGODB_URI_DEV
-      : process.env.MONGODB_URI_DEV; // adjust if you have a LIVE URI env
+    // If already connected, return existing connection
+    if (isConnected) {
+      return mongoose.connection;
+    }
 
-    console.log("MONGO connecting =>", isLive ? "live" : "local");
+    // Always use live environment
+    const uri = process.env.MONGODB_URI_DEV;
+    console.log("MONGO connecting => live");
 
     await mongoose.connect(uri, {
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true,
-      // serverSelectionTimeoutMS: 10000,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      bufferCommands: false
     });
 
-    console.log("Mongo connected:", isLive ? "live" : "local");
+    isConnected = true;
+    console.log("Mongo connected: live");
 
-    // DO NOT send profiling commands on managed/shared clusters
-    // const db = mongoose.connection.db;
-    // await db.command({ profile: 0, slowms: 5000000 });
+    // Handle connection events
+    mongoose.connection.on('error', (err) => {
+      console.error('MongoDB connection error:', err);
+      isConnected = false;
+    });
+
+    mongoose.connection.on('disconnected', () => {
+      console.log('MongoDB disconnected');
+      isConnected = false;
+    });
 
     return mongoose.connection;
   } catch (err) {
     console.error("Mongo connect error:", err);
-    throw err; // let caller decide; avoids nodemon crash loop from process.exit(1)
+    isConnected = false;
+    throw err;
   }
 }
 
