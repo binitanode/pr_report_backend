@@ -125,11 +125,28 @@ const validateVerifyUrl = [
   handleValidationErrors
 ];
 
+
+const validatePaginationQuery = [
+  query('page')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Page must be a positive integer'),
+  
+  query('pageSize')
+    .optional()
+    .isInt({ min: 10 })
+    .withMessage('Page size must be a positive integer'),
+  
+  handleValidationErrors
+];
+
+
 module.exports = {
   validatePrDistributionId,
   validatePrDistributionQuery,
   validateCsvFile,
   validateSharePrReport,
   validateVerifyUrl,
+  validatePaginationQuery,
   handleValidationErrors
 };

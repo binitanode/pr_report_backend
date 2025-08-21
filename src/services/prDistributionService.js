@@ -407,9 +407,43 @@ async function exportCsv(grid_id) {
   return { csv: csvData, filename };
 }
 
-async function getGroups() {
-  const groups = await PrDistributionGroup.find({ soft_delete: false });
-  return groups;
+async function getGroups(req) {
+  console.log("req.query---------", req.query.page, req.query.pageSize);
+  console.log("req.params---------", req.params);
+  // Set default values for pagination
+  const page = parseInt(req.query.page, 10) || 1;
+  const pageSize = parseInt(req.query.pageSize, 10) || 10;
+  const skipCount = (page - 1) * pageSize;
+  
+  // Validate pagination parameters
+  if (page < 1) throw ApiError.badRequest("Page number must be greater than 0");
+  if (pageSize < 1 || pageSize > 100) throw ApiError.badRequest("Page size must be between 1 and 100");
+
+  // Get total count for pagination metadata
+  const totalCount = await PrDistributionGroup.countDocuments({ soft_delete: false });
+  
+  // Get paginated results
+  const groups = await PrDistributionGroup.find({ soft_delete: false })
+    .skip(skipCount)
+    .limit(pageSize)
+    .sort({ createdAt: -1 }); // Sort by newest first
+  
+  // Calculate pagination metadata
+  const totalPages = Math.ceil(totalCount / pageSize);
+  const hasNextPage = page < totalPages;
+  const hasPrevPage = page > 1;
+  
+  return {
+    data: groups,
+      currentPage: page,
+      pageSize: pageSize,
+      totalCount: totalCount,
+      totalPages: totalPages,
+      hasNextPage: hasNextPage,
+      hasPrevPage: hasPrevPage,
+      nextPage: hasNextPage ? page + 1 : null,
+      prevPage: hasPrevPage ? page - 1 : null
+  };
 }
 
 module.exports = {

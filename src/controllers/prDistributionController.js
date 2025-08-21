@@ -263,7 +263,7 @@ class PrDistributionController {
 
   async getPRReportGroups(req, res, next) {
     try {
-      const data = await PrDistributionService.getGroups();
+      const data = await PrDistributionService.getGroups(req);
       res.json(data);
     } catch (err) {
       // Pass the error directly to preserve the original message

@@ -74,6 +74,7 @@ router.get(
 router.get(
   "/getPRReportGroups",
   jwtMiddleware,
+  validatePaginationQuery,
   PrDistributionController.getPRReportGroups
 );
 
